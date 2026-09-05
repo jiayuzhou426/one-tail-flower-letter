@@ -1,0 +1,2 @@
+import type {Page} from '../types';
+export function BottomNav({page,setPage}:{page:Page;setPage:(p:Page)=>void}){return <nav className="bottom-nav"><button className={page==='explore'?'active':''} onClick={()=>setPage('explore')}>⌇<span>远游</span></button><button className={page==='pond'?'active':''} onClick={()=>setPage('pond')}>◌<span>花塘</span></button><button className={page==='arrange'?'active':''} onClick={()=>setPage('arrange')}>⌑<span>花瓶</span></button></nav>}

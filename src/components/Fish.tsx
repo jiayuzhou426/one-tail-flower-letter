@@ -1,0 +1,1 @@
+export function Fish({className='',style}:{className?:string;style?:React.CSSProperties}) { return <svg className={'fish '+className} style={style} viewBox="0 0 120 70" aria-label="小鱼"><path className="tail" d="M35 35 5 10Q18 35 5 60Z"/><ellipse cx="64" cy="35" rx="37" ry="22"/><path d="M62 17Q77 2 86 16" className="fin"/><circle cx="88" cy="29" r="3" className="eye"/></svg> }

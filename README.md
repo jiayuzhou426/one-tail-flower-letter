@@ -33,4 +33,16 @@ npm run build
 - `src/persistence.ts`：localStorage 容错读取及写入
 - `src/types.ts`：游戏领域数据类型
 
-无外部图片、字体或在线资源；视觉元素均由 Canvas、CSS 与内联 SVG 生成。
+探索地图使用项目内置图片与可编辑碰撞蒙版，不请求在线资源；其他视觉元素由 Canvas、WebGL、CSS 与内联 SVG 生成。
+
+## 探索碰撞轮廓检查
+
+启动开发服务器后打开：
+
+```text
+http://127.0.0.1:5175/?exploreCollision=1&collisionDebug=1&level=1
+```
+
+把 `level` 改为 `1` 至 `5` 检查五关。底部滑杆可暂停并浏览整张地图：青色是可通行水面，红色是障碍，白线是连续碰撞边界，鱼周围黄圈是安全范围。
+
+蒙版位于 `public/assets/explore/levels/level-N-mask.png`，必须保持与关卡图相同的 853×3688 尺寸。白色表示可通行，黑色表示障碍；可在绘图软件中直接修正。`scripts/generate_explore_masks.py` 仅用于更换源图时重新生成初稿，不会在运行或构建时覆盖手工调整。

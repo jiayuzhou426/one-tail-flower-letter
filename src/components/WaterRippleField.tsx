@@ -10,6 +10,8 @@ type WaterRippleFieldProps = {
   durationMs?: number;
   progressOverride?: number;
   collisionDebug?: boolean;
+  onReady?: () => void;
+  onUnavailable?: () => void;
   onComplete?: () => void;
   className?: string;
 };
@@ -348,13 +350,19 @@ export function WaterRippleField({
   durationMs = 20_000,
   progressOverride,
   collisionDebug = false,
+  onReady,
+  onUnavailable,
   onComplete,
   className = '',
 }: WaterRippleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const onCompleteRef = useRef(onComplete);
+  const onReadyRef = useRef(onReady);
+  const onUnavailableRef = useRef(onUnavailable);
   const progressOverrideRef = useRef(progressOverride);
   onCompleteRef.current = onComplete;
+  onReadyRef.current = onReady;
+  onUnavailableRef.current = onUnavailable;
   progressOverrideRef.current = progressOverride;
 
   useEffect(() => {
@@ -364,7 +372,10 @@ export function WaterRippleField({
     let disposed = false;
 
     const gl = canvas.getContext('webgl', { alpha: true, antialias: false, premultipliedAlpha: false });
-    if (!gl) return undefined;
+    if (!gl) {
+      onUnavailableRef.current?.();
+      return undefined;
+    }
 
     const simulationProgram = createProgram(gl, SIMULATION_SHADER);
     const sceneProgram = createProgram(gl, SCENE_SHADER);
@@ -377,6 +388,7 @@ export function WaterRippleField({
       if (buffer) gl.deleteBuffer(buffer);
       if (baseTexture) gl.deleteTexture(baseTexture);
       if (maskTexture) gl.deleteTexture(maskTexture);
+      onUnavailableRef.current?.();
       return undefined;
     }
 
@@ -414,6 +426,7 @@ export function WaterRippleField({
       gl.deleteBuffer(buffer);
       gl.deleteTexture(baseTexture);
       gl.deleteTexture(maskTexture);
+      onUnavailableRef.current?.();
       return undefined;
     }
 
@@ -459,7 +472,7 @@ export function WaterRippleField({
     let imageOffsetX = 0;
     let imageOffsetY = 0;
     let imageOffsetRangeY = 0;
-    let maskPixels: Uint8ClampedArray | null = null;
+    let maskPixels: Uint8Array | null = null;
     let maskPixelWidth = 0;
     let maskPixelHeight = 0;
     let fishCurrentX = fishX;
@@ -584,6 +597,7 @@ export function WaterRippleField({
       cancelAnimationFrame(raf);
       // The semantic <img> remains underneath as a reliable visual fallback.
       delete canvas.dataset.ready;
+      onUnavailableRef.current?.();
     };
 
     const advanceSimulation = (drop?: RippleDrop) => {
@@ -618,7 +632,7 @@ export function WaterRippleField({
       const sourceX = Math.round((screenX * imageScaleX + imageOffsetX) * (maskPixelWidth - 1));
       const sourceY = Math.round((screenY * imageScaleY + imageOffsetY) * (maskPixelHeight - 1));
       if (sourceX < 0 || sourceX >= maskPixelWidth || sourceY < 0 || sourceY >= maskPixelHeight) return false;
-      return maskPixels[(sourceY * maskPixelWidth + sourceX) * 4] >= COLLISION_MASK_CUTOFF;
+      return maskPixels[sourceY * maskPixelWidth + sourceX] >= COLLISION_MASK_CUTOFF;
     };
 
     const fishHasClearance = (screenX: number, screenY: number, radiusPx: number) => {
@@ -814,11 +828,16 @@ export function WaterRippleField({
         maskContext.drawImage(mask, 0, 0);
         maskPixelWidth = maskCanvas.width;
         maskPixelHeight = maskCanvas.height;
-        maskPixels = maskContext.getImageData(0, 0, maskPixelWidth, maskPixelHeight).data;
+        const rgba = maskContext.getImageData(0, 0, maskPixelWidth, maskPixelHeight).data;
+        maskPixels = new Uint8Array(maskPixelWidth * maskPixelHeight);
+        for (let index = 0; index < maskPixels.length; index += 1) {
+          maskPixels[index] = rgba[index * 4];
+        }
       }
       imageReady = true;
       startedAt = performance.now();
       canvas.dataset.ready = 'true';
+      onReadyRef.current?.();
       raf = requestAnimationFrame(render);
     };
     image.onload = () => {
@@ -827,11 +846,13 @@ export function WaterRippleField({
       baseLoaded = true;
       begin();
     };
+    image.onerror = () => onUnavailableRef.current?.();
     mask.onload = () => {
       if (disposed) return;
       maskLoaded = true;
       begin();
     };
+    mask.onerror = () => onUnavailableRef.current?.();
     image.src = imageSrc;
     mask.src = maskSrc;
 
@@ -852,7 +873,9 @@ export function WaterRippleField({
       cancelAnimationFrame(raf);
       observer.disconnect();
       image.onload = null;
+      image.onerror = null;
       mask.onload = null;
+      mask.onerror = null;
       canvas.removeEventListener('pointerdown', onPointerDown);
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerup', onPointerEnd);

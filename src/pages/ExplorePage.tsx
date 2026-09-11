@@ -33,11 +33,11 @@ export function ExplorePage({ finish }: { finish: (biome: string, rainy: boolean
   return (
     <main className="explore page" style={{ padding: 0, background: '#9bcdea' }}>
       <style>{`
-        .explore-stage,.explore-stage__fallback,.explore-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+        .explore-stage,.explore-fallback-canvas,.explore-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
         .explore-stage{overflow:hidden;background:#9bcdea}
-        .explore-stage__fallback{object-fit:cover;object-position:center bottom}
-        .explore-canvas{touch-action:none;opacity:0;transition:opacity .35s ease}
-        .explore-canvas[data-ready='true']{opacity:1}
+        .explore-fallback-canvas{touch-action:none}
+        .explore-canvas{touch-action:none;opacity:0;pointer-events:none;transition:opacity .35s ease}
+        .explore-canvas[data-ready='true']{opacity:1;pointer-events:auto}
         .collision-inspector{position:absolute;z-index:8;left:16px;right:16px;bottom:max(18px,env(safe-area-inset-bottom));display:grid;gap:6px;padding:12px 14px;color:#234d5b;background:rgba(244,253,253,.9);border:1px solid rgba(255,255,255,.9);border-radius:14px;box-shadow:0 8px 28px rgba(31,79,95,.16);font:12px/1.4 system-ui,sans-serif;backdrop-filter:blur(10px)}
         .collision-inspector strong{font-size:13px;font-weight:600}.collision-inspector label{display:grid;gap:4px}.collision-inspector input{width:100%;accent-color:#28a99d}
         body .bottom-nav{display:none!important}

@@ -1,0 +1,84 @@
+.spring-frame-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #a9cbd2;
+}
+
+.spring-frame {
+  position: relative;
+  width: min(100vw, calc(100dvh * 853 / 1844));
+  max-width: 480px;
+  height: 100dvh;
+  overflow: hidden;
+  background: #c5e4e6;
+  isolation: isolate;
+}
+
+@media (max-width: 480px) {
+  .spring-frame {
+    width: 100vw;
+    max-width: none;
+  }
+}
+
+.spring-frame__art,
+.spring-frame__water,
+.spring-frame__mask-guide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spring-frame__art {
+  display: block;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.spring-frame__water {
+  z-index: 1;
+  display: block;
+  opacity: 0;
+  touch-action: none;
+  transition: opacity .45s ease;
+}
+
+.spring-frame__water[data-ready='true'] {
+  opacity: 1;
+}
+
+.spring-frame__mask-guide {
+  z-index: 2;
+  display: block;
+  object-fit: cover;
+  opacity: .55;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.spring-frame__fish {
+  position: absolute;
+  z-index: 2;
+  left: 51%;
+  top: 63.2%;
+  width: auto;
+  height: 108px;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 4px 10px rgba(59, 169, 212, .24));
+  opacity: 1;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+
+.spring-frame__water[data-ready='true'] ~ .spring-frame__fish {
+  opacity: 0;
+}
+
+@media (min-width: 481px) {
+  .spring-frame {
+    box-shadow: 0 0 54px rgba(58, 108, 120, .22);
+  }
+}

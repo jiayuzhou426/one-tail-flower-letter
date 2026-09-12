@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="853" height="1844" viewBox="0 0 853 1844" preserveAspectRatio="none">
+  <defs>
+    <filter id="edge-softness" x="-8%" y="-4%" width="116%" height="108%">
+      <feGaussianBlur stdDeviation="10" />
+    </filter>
+  </defs>
+  <rect width="853" height="1844" fill="#000" />
+  <!-- White = ripple water. Edit this path's d values in a vector editor or
+       text editor; retain the 853×1844 viewBox so it stays aligned to the art. -->
+  <path
+    filter="url(#edge-softness)"
+    fill="#fff"
+    d="M246 0
+       C268 152 208 299 282 431
+       C360 567 321 676 254 798
+       C194 910 264 1026 332 1130
+       C403 1238 341 1374 269 1499
+       C218 1590 246 1722 300 1844
+       L658 1844
+       C611 1719 631 1591 686 1481
+       C751 1353 700 1223 621 1112
+       C539 997 604 898 674 773
+       C738 657 686 544 598 425
+       C516 314 567 156 623 0 Z"
+  />
+</svg>

@@ -1,4 +1,60 @@
-import {useEffect,useRef} from 'react'; import {Fish} from './Fish';
-import type {BiomeDefinition} from '../types';
-export function ExplorationCanvas({biome,rainy,onDone}:{biome:BiomeDefinition;rainy:boolean;onDone:(got:boolean)=>void}){const ref=useRef<HTMLCanvasElement>(null), fish=useRef(0.5), target=useRef(.5),got=useRef(false); useEffect(()=>{const canvas=ref.current!;const ctx=canvas.getContext('2d')!;let frame=0,start=performance.now(),seedY=0; const resize=()=>{canvas.width=canvas.clientWidth*devicePixelRatio;canvas.height=canvas.clientHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};resize();addEventListener('resize',resize); const draw=(now:number)=>{const w=canvas.clientWidth,h=canvas.clientHeight,t=(now-start)/1000;ctx.fillStyle=biome.water;ctx.fillRect(0,0,w,h); for(let i=0;i<13;i++){const y=((i*103+t*32)% (h+140))-70,x=(i*71%w);ctx.globalAlpha=.23;ctx.fillStyle=i%3?'#52796F':'#F0E9D8';ctx.beginPath();ctx.ellipse(x,y,45+(i%4)*12,12,0,0,7);ctx.fill();}ctx.globalAlpha=1; // drifted scene
-for(let i=0;i<8;i++){const y=((i*151+t*52)%(h+120))-60,x=(i*97+40)%w;ctx.fillStyle='#A8CFB4';ctx.beginPath();ctx.arc(x,y,15,0,7);ctx.fill();ctx.strokeStyle='#52796F';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+18,y-22);ctx.stroke()} if(t>3.5&&!got.current){seedY=h*.43;const sx=fish.current*w+(t>7?0:Math.sin(t)*.09*w);const sy=h*.42;ctx.shadowColor='#fff';ctx.shadowBlur=18;ctx.fillStyle='#F8F0B0';ctx.beginPath();ctx.arc(sx,sy,8,0,7);ctx.fill();ctx.shadowBlur=0; if(Math.hypot(sx-fish.current*w,sy-h*.62)<170||(t>9)){got.current=true;}} fish.current+=(target.current-fish.current)*.1; const fx=fish.current*w,fy=h*.62;ctx.save();ctx.translate(fx,fy);ctx.rotate((target.current-fish.current)*2);ctx.fillStyle='#3976D8';ctx.beginPath();ctx.ellipse(0,0,30,17,0,0,7);ctx.fill();ctx.beginPath();ctx.moveTo(-25,0);ctx.lineTo(-50,Math.sin(t*9)*12);ctx.lineTo(-50,-Math.sin(t*9)*12);ctx.closePath();ctx.fill();ctx.fillStyle='#F2F5F2';ctx.beginPath();ctx.arc(15,-5,2.5,0,7);ctx.fill();ctx.restore();if(rainy){ctx.strokeStyle='rgba(255,255,255,.48)';ctx.lineWidth=1;for(let i=0;i<28;i++){const x=(i*61+t*55)%w,y=(i*83+t*130)%h;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-5,y+13);ctx.stroke()}} if(t>=10){onDone(got.current);return} frame=requestAnimationFrame(draw)};frame=requestAnimationFrame(draw);return()=>{cancelAnimationFrame(frame);removeEventListener('resize',resize)}},[biome,rainy,onDone]); const pointer=(e:React.PointerEvent<HTMLCanvasElement>)=>{const r=e.currentTarget.getBoundingClientRect();target.current=Math.max(.1,Math.min(.9,(e.clientX-r.left)/r.width))};return <><canvas ref={ref} className="explore-canvas" onPointerDown={pointer} onPointerMove={e=>{if(e.buttons)pointer(e)}}/><Fish className="canvas-fish-a11y"/></>}
+import { useRef, useState } from 'react';
+import type { BiomeDefinition } from '../types';
+import { exploreLevels } from '../game/explore/levels';
+import { ExploreCanvasFallback } from './ExploreCanvasFallback';
+import { WaterRippleField } from './WaterRippleField';
+
+const biomeOrder = ['lotus', 'reeds', 'mist', 'sand', 'cove'];
+
+type ExplorationCanvasProps = {
+  biome: BiomeDefinition;
+  rainy: boolean;
+  onDone: (got: boolean) => void;
+  debugProgress?: number;
+};
+
+export function ExplorationCanvas({ biome, onDone, debugProgress }: ExplorationCanvasProps) {
+  const completedRef = useRef(false);
+  const [webglReady, setWebglReady] = useState(false);
+  const query = new URLSearchParams(window.location.search);
+  const requestedLevel = Number(query.get('level'));
+  const biomeLevel = Math.max(0, biomeOrder.indexOf(biome.id));
+  const levelIndex = Number.isFinite(requestedLevel) && requestedLevel >= 1
+    ? Math.min(exploreLevels.length - 1, Math.floor(requestedLevel) - 1)
+    : biomeLevel;
+  const level = exploreLevels[levelIndex];
+  const collisionDebug = query.get('collisionDebug') === '1';
+  const completeOnce = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onDone(true);
+  };
+
+  return (
+    <div className="explore-stage" aria-label={`${level.name}探索地图`}>
+      <ExploreCanvasFallback
+        imageSrc={level.imageSrc}
+        durationMs={20_000}
+        fishX={.5}
+        fishY={.68}
+        active={!webglReady}
+        onComplete={completeOnce}
+      />
+      <WaterRippleField
+        className="explore-canvas"
+        imageSrc={level.imageSrc}
+        maskSrc={level.maskSrc}
+        fishX={.5}
+        fishY={.68}
+        fishWake
+        playable
+        durationMs={20_000}
+        progressOverride={collisionDebug ? debugProgress : undefined}
+        collisionDebug={collisionDebug}
+        onReady={() => setWebglReady(true)}
+        onUnavailable={() => setWebglReady(false)}
+        onComplete={completeOnce}
+      />
+    </div>
+  );
+}

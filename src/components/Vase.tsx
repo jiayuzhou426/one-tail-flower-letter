@@ -1,1 +1,5 @@
-export function Vase(){return <svg className="vase" viewBox="0 0 220 270" aria-label="花瓶"><path d="M80 8h60l-5 60c0 15 43 35 38 115-3 54-29 75-63 75s-60-21-63-75c-5-80 38-100 38-115Z" fill="#3976D8" fillOpacity=".72"/><path d="M80 8h60" stroke="#F2F5F2" strokeOpacity=".7" strokeWidth="7"/></svg>}
+import { VASE_ASSET } from '../data/vase';
+
+export function Vase() {
+  return <img className="vase vase-asset" src={VASE_ASSET} alt="雾蓝玻璃花瓶" draggable={false} />;
+}

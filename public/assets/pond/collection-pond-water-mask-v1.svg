@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="941" height="1672" viewBox="0 0 941 1672">
+  <rect width="941" height="1672" fill="#000"/>
+  <!-- Water begins below the illustrated bank, steps and flower-shop rocks. -->
+  <path fill="#fff" d="M0 492 C78 488 139 492 202 506 C286 525 344 540 419 543 C504 548 575 540 654 550 C756 560 852 549 941 557 L941 1672 H0Z"/>
+  <!-- Foreground rocks and reeds stay sharp while the surrounding pool refracts. -->
+  <path fill="#000" d="M0 1450 C56 1433 132 1452 185 1505 C218 1536 251 1583 279 1672 H0Z"/>
+  <path fill="#000" d="M693 1512 C757 1457 852 1450 941 1485 L941 1672 H658 C663 1604 674 1549 693 1512Z"/>
+</svg>

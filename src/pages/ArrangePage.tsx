@@ -1,18 +1,93 @@
-import {useRef,useState} from 'react';
-import {useGame} from '../GameContext';
-import {Flower} from '../components/Flower';
-import {Vase} from '../components/Vase';
-import {bouquetLines} from '../data/copywriting';
-import type {BouquetStem} from '../types';
+import { useRef, useState } from 'react';
+import { useGame } from '../GameContext';
+import { Flower } from '../components/Flower';
+import { FlowerLetterTray } from '../components/FlowerLetterTray';
+import { Vase } from '../components/Vase';
+import { flowerById } from '../data/flowers';
+import { MAX_VASE_STEMS, VASE_BACKGROUND_ASSET, vaseStemSlots } from '../data/vase';
+import type { BouquetStem, FlowerStage } from '../types';
 
-const positions=[[34,75],[67,73],[48,57],[25,54],[76,50]];
-export function ArrangePage(){
- const {data,setBouquet}=useGame(); const [done,setDone]=useState(false); const [drag,setDrag]=useState<string|null>(null);
- const [line]=useState(()=>bouquetLines[Math.floor(Math.random()*bouquetLines.length)]); const press=useRef(0);
- const add=(flowerId:string)=>{if(data.bouquet.length<5)setBouquet([...data.bouquet,{id:crypto.randomUUID(),flowerId,slot:data.bouquet.length,heightOffset:0,angle:0}])};
- const update=(stem:BouquetStem)=>setBouquet(data.bouquet.map(x=>x.id===stem.id?stem:x));
- return <main className="arrange page"><header className="arrange-head"><div><p className="eyebrow">花瓶</p><p>把远方安放下来</p></div><button className="quiet" onClick={()=>setBouquet([])}>清空</button></header>
- <div className="vase-stage" onPointerUp={()=>setDrag(null)}>{data.bouquet.map(stem=>{const [x,y]=positions[stem.slot];return <button key={stem.id} className="stem" style={{left:`${x}%`,top:`${y-stem.heightOffset/3}%`,transform:`translate(-50%,-100%) rotate(${stem.angle}deg)`,zIndex:10-stem.slot}} onClick={()=>update({...stem,angle:stem.angle===-18?0:stem.angle===0?18:-18})} onDoubleClick={()=>setBouquet(data.bouquet.filter(x=>x.id!==stem.id))} onPointerDown={e=>{press.current=e.clientY;setDrag(stem.id);e.currentTarget.setPointerCapture(e.pointerId)}} onPointerMove={e=>{if(drag===stem.id&&e.buttons){const heightOffset=Math.max(-32,Math.min(44,(press.current-e.clientY)/3));update({...stem,heightOffset})}}}><Flower id={stem.flowerId} size={74} stem/></button>})}<Vase/></div>
- <p className="arrange-tip">点击转向 · 上下拖动调整高度 · 双击移除</p><div className="flower-shelf">{data.discoveredFlowerIds.length?data.discoveredFlowerIds.map(id=><button key={id} onClick={()=>add(id)}><Flower id={id} size={48}/><span>{id==='water_lily'?'睡莲':id==='nameless'?'未名花':id==='narcissus'?'水仙':id==='iris'?'鸢尾':'白莲'}</span></button>):<p>花还在远处的水里。</p>}</div>
- <button className="primary leave" disabled={!data.bouquet.length} onClick={()=>setDone(true)}>留下这一瓶</button>{done&&<div className="modal-back"><section className="finish-card"><span>✦</span><h2>一瓶水路</h2><p>{line}</p><button className="primary" onClick={()=>setDone(false)}>再看一会儿</button></section></div>}</main>
+const bouquetStages: FlowerStage[] = ['bloom', 'half-open', 'bud'];
+
+export function ArrangePage() {
+  const { data, lastSavedAt, setBouquet } = useGame();
+  const [selectedStemId, setSelectedStemId] = useState<string | null>(null);
+  const [draggedStemId, setDraggedStemId] = useState<string | null>(null);
+  const pressY = useRef(0);
+  const isFull = data.bouquet.length >= MAX_VASE_STEMS;
+  const selectedStem = data.bouquet.find(stem => stem.id === selectedStemId) ?? null;
+
+  const update = (stem: BouquetStem) => setBouquet(data.bouquet.map(item => item.id === stem.id ? stem : item));
+  const add = (flowerId: string) => {
+    if (isFull) return;
+    const sameFlowerCount = data.bouquet.filter(stem => stem.flowerId === flowerId).length;
+    const slot = vaseStemSlots[data.bouquet.length];
+    const stem: BouquetStem = {
+      id: crypto.randomUUID(),
+      flowerId,
+      slot: data.bouquet.length,
+      heightOffset: 0,
+      angle: slot.angle,
+      stage: bouquetStages[sameFlowerCount % bouquetStages.length],
+    };
+    setBouquet([...data.bouquet, stem]);
+    setSelectedStemId(stem.id);
+  };
+  const rotateSelected = (amount: number) => {
+    if (!selectedStem) return;
+    update({ ...selectedStem, angle: Math.max(-28, Math.min(28, selectedStem.angle + amount)) });
+  };
+  const removeSelected = () => {
+    if (!selectedStem) return;
+    setBouquet(data.bouquet.filter(stem => stem.id !== selectedStem.id).map((stem, slot) => ({ ...stem, slot })));
+    setSelectedStemId(null);
+  };
+
+  return <main className="arrange vase-letter page">
+    <img className="vase-letter-backdrop" src={VASE_BACKGROUND_ASSET} alt="" draggable={false} />
+    <div className="vase-letter-veil" />
+    <header className="vase-letter-head">
+      <div><p className="eyebrow">花信花瓶</p><h1>把远方轻轻放进一只瓶子。</h1></div>
+      <div className="vase-head-actions">
+        <span className="vase-auto-save" aria-live="polite"><i />{lastSavedAt ? '已自动保存' : '正在保存'}</span>
+        <button className="vase-reset" type="button" disabled={!data.bouquet.length} onClick={() => { setBouquet([]); setSelectedStemId(null); }}>清空</button>
+      </div>
+    </header>
+
+    <section className="vase-letter-stage" onPointerUp={() => setDraggedStemId(null)} onPointerCancel={() => setDraggedStemId(null)} aria-label="花瓶编辑台">
+      <div className="vase-letter-halo" aria-hidden="true" />
+      {data.bouquet.map(stem => {
+        const position = vaseStemSlots[stem.slot] ?? vaseStemSlots[0];
+        return <button
+          key={stem.id}
+          type="button"
+          className={`vase-stem ${selectedStemId === stem.id ? 'is-selected' : ''}`}
+          style={{ left: `${position.left}%`, top: `${position.top - stem.heightOffset / 3}%`, transform: `translate(-50%, -100%) rotate(${stem.angle}deg)`, zIndex: 12 + position.layer }}
+          onClick={() => setSelectedStemId(stem.id)}
+          onPointerDown={event => { pressY.current = event.clientY; setDraggedStemId(stem.id); setSelectedStemId(stem.id); event.currentTarget.setPointerCapture(event.pointerId); }}
+          onPointerMove={event => {
+            if (draggedStemId !== stem.id || !event.buttons) return;
+            const heightOffset = Math.max(-30, Math.min(42, (pressY.current - event.clientY) / 3));
+            update({ ...stem, heightOffset });
+          }}
+          onPointerUp={() => setDraggedStemId(null)}
+          onPointerCancel={() => setDraggedStemId(null)}
+          aria-label={`编辑${flowerById(stem.flowerId).name}`}
+        >
+          <Flower id={stem.flowerId} size={88} stem state={stem.stage} />
+        </button>;
+      })}
+      <Vase />
+    </section>
+
+    <section className="vase-letter-controls" aria-live="polite">
+      {selectedStem ? <>
+        <p><b>{flowerById(selectedStem.flowerId).name}</b><span>上下拖动调整高低</span></p>
+        <div><button type="button" onClick={() => rotateSelected(-7)}>向左转</button><button type="button" onClick={() => rotateSelected(7)}>向右转</button><button type="button" className="vase-remove" onClick={removeSelected}>移除</button></div>
+      </> : <p className="vase-letter-tip">选择花信加入花瓶；点选花枝后，可拖动、转向或移除。</p>}
+      <strong>{data.bouquet.length} / {MAX_VASE_STEMS} 枝{isFull ? ' · 花瓶已满' : ''}</strong>
+    </section>
+
+    <FlowerLetterTray ownedIds={data.discoveredFlowerIds} stemCount={data.bouquet.length} maxStems={MAX_VASE_STEMS} onPick={add} />
+  </main>;
 }

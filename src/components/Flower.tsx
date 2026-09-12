@@ -1,2 +1,28 @@
-import {flowerById} from '../data/flowers';
-export function Flower({id,size=58,stem=false,className='' }:{id:string;size?:number;stem?:boolean;className?:string}){const f=flowerById(id),[petal,center]=f.colors; const petals= id==='iris'?5:id==='nameless'?7:6; return <svg className={'flower '+className} width={size} height={stem?size*2:size} viewBox="0 0 100 150" aria-label={f.name}>{stem&&<path d="M50 142 Q49 100 50 65" stroke="#52796F" strokeWidth="4" fill="none"/>}<g transform="translate(0 18)">{[...Array(petals)].map((_,i)=><ellipse key={i} cx="50" cy="47" rx={id==='iris'?14:18} ry="30" fill={petal} opacity=".94" transform={`rotate(${i*360/petals} 50 47)`}/>)}<circle cx="50" cy="47" r="10" fill={center}/>{id==='narcissus'&&<circle cx="50" cy="47" r="15" fill="none" stroke="#F2CE63" strokeWidth="5"/>}</g></svg>}
+import { flowerById } from '../data/flowers';
+import type { FlowerStage } from '../types';
+
+export function Flower({
+  id,
+  size = 64,
+  stem = false,
+  className = '',
+  growing = false,
+  state = 'bloom',
+}: {
+  id: string;
+  size?: number;
+  stem?: boolean;
+  className?: string;
+  growing?: boolean;
+  state?: FlowerStage;
+}) {
+  const flower = flowerById(id);
+  return <img
+    className={`flower flower-asset ${stem ? 'has-stem' : 'is-head'} ${growing ? 'is-growing' : ''} ${className}`}
+    src={flower.assets[state]}
+    alt={flower.name}
+    width={size}
+    height={stem ? Math.round(size * 1.65) : size}
+    draggable={false}
+  />;
+}

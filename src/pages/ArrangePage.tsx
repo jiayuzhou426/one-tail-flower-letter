@@ -3,6 +3,7 @@ import { useGame } from '../GameContext';
 import { Flower } from '../components/Flower';
 import { FlowerLetterTray } from '../components/FlowerLetterTray';
 import { Vase } from '../components/Vase';
+import { VaseExportButton } from '../components/VaseExportButton';
 import { flowerById } from '../data/flowers';
 import { MAX_VASE_STEMS, VASE_BACKGROUND_ASSET, vaseStemSlots } from '../data/vase';
 import type { BouquetStem, FlowerStage } from '../types';
@@ -11,6 +12,7 @@ const bouquetStages: FlowerStage[] = ['bloom', 'half-open', 'bud'];
 
 export function ArrangePage() {
   const { data, lastSavedAt, setBouquet } = useGame();
+  const exportTargetRef = useRef<HTMLElement>(null);
   const [selectedStemId, setSelectedStemId] = useState<string | null>(null);
   const [draggedStemId, setDraggedStemId] = useState<string | null>(null);
   const pressY = useRef(0);
@@ -47,13 +49,14 @@ export function ArrangePage() {
     setSelectedStemId(null);
   };
 
-  return <main className="arrange vase-letter page">
+  return <main ref={exportTargetRef} className="arrange vase-letter page">
     <img className="vase-letter-backdrop" src={VASE_BACKGROUND_ASSET} alt="" draggable={false} />
     <div className="vase-letter-veil" />
     <header className="vase-letter-head">
       <div><p className="eyebrow">花信花瓶</p><h1>把远方轻轻放进一只瓶子。</h1></div>
       <div className="vase-head-actions">
         <span className="vase-auto-save" aria-live="polite"><i />{lastSavedAt ? '已自动保存' : '正在保存'}</span>
+        <VaseExportButton targetRef={exportTargetRef} bouquet={data.bouquet} />
         <button className="vase-reset" type="button" disabled={!data.bouquet.length} onClick={() => { setBouquet([]); setSelectedStemId(null); }}>清空</button>
       </div>
     </header>
@@ -69,6 +72,7 @@ export function ArrangePage() {
             key={stem.id}
             type="button"
             className={`vase-stem ${selectedStemId === stem.id ? 'is-selected' : ''}`}
+            data-vase-stem-id={stem.id}
             style={{
               left: `${position.left}%`,
               bottom: `calc(${position.mouth}% + ${stem.heightOffset}px)`,

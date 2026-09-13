@@ -10,8 +10,12 @@ export interface FlowerDefinition {
   rarity: string;
   discovery: string;
   colors: string[];
+  /** Smaller WebP sources used by modern browsers. */
   assets: Record<FlowerStage, string>;
+  /** Original PNG sources retained for browsers without WebP support. */
+  assetFallbacks: Record<FlowerStage, string>;
   pondClusterAsset: string;
+  pondClusterFallbackAsset: string;
   pondScale: number;
 }
 

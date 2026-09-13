@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { flowers } from '../data/flowers';
+import { OptimizedImage } from './OptimizedImage';
 
 type FlowerLetterTrayProps = {
   ownedIds: string[];
@@ -30,7 +31,7 @@ export function FlowerLetterTray({ ownedIds, stemCount, maxStems, onPick }: Flow
         style={{ '--letter-tint': flower.colors[0], '--letter-light': flower.colors[1] } as CSSProperties}
       >
         <span className="flower-letter__tab" aria-hidden="true" />
-        <span className="flower-letter__preview" aria-hidden="true"><img src={flower.assets.bloom} alt="" draggable={false} /></span>
+        <span className="flower-letter__preview" aria-hidden="true"><OptimizedImage src={flower.assets.bloom} fallbackSrc={flower.assetFallbacks.bloom} alt="" draggable={false} /></span>
         <span className="flower-letter__face" aria-hidden="true" />
         <span className="flower-letter__copy"><span>花信 · {flower.meaning}</span><strong>{flower.name}</strong></span>
         <span className="flower-letter__add" aria-hidden="true">{isFull ? '—' : '＋'}</span>

@@ -4,6 +4,7 @@ import { collectionPondSlots } from '../data/collectionPond';
 import { flowerById, flowers } from '../data/flowers';
 import { PondWaterCanvas, type PondWaterPulse } from '../components/PondWaterCanvas';
 import { WaterRippleField } from '../components/WaterRippleField';
+import { OptimizedImage } from '../components/OptimizedImage';
 
 const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 const sceneAsset = publicAsset('assets/pond/collection-pond-scene-v1.png');
@@ -97,7 +98,7 @@ export function PondPage({ openArrange }: { openArrange: () => void }) {
           >
             <span className="collection-slot-glow" />
             {pondPlant && flower
-              ? <img className="collection-cluster" src={flower.pondClusterAsset} alt={flower.name} style={{ '--pond-scale': String(flower.pondScale) } as CSSProperties} draggable={false} />
+              ? <OptimizedImage className="collection-cluster" src={flower.pondClusterAsset} fallbackSrc={flower.pondClusterFallbackAsset} alt={flower.name} style={{ '--pond-scale': String(flower.pondScale) } as CSSProperties} draggable={false} />
               : selectable ? <span className="collection-empty-mark">＋</span> : null}
           </button>;
         })}
@@ -122,7 +123,7 @@ export function PondPage({ openArrange }: { openArrange: () => void }) {
         {flowers.map(flower => {
           const pondPlant = data.pondPlants.find(plant => plant.flowerId === flower.id);
           return <article className={`catalog-row ${pondPlant ? '' : 'locked'}`} key={flower.id}>
-            <img className="catalog-cluster" src={flower.pondClusterAsset} alt="" />
+            <OptimizedImage className="catalog-cluster" src={flower.pondClusterAsset} fallbackSrc={flower.pondClusterFallbackAsset} alt="" />
             <div><b>{pondPlant ? flower.name : '尚未抵达'}</b><small>{pondPlant ? `${flower.meaning} · ${flower.rarity}` : '等待下一次远游'}</small></div>
             {pondPlant && <em>已安放</em>}
           </article>;
@@ -131,7 +132,7 @@ export function PondPage({ openArrange }: { openArrange: () => void }) {
     </div>}
 
     {newFlower && <section className="collection-toast" aria-live="polite">
-      <img className="collection-toast-cluster" src={flowerById(newFlower).pondClusterAsset} alt="" />
+      <OptimizedImage className="collection-toast-cluster" src={flowerById(newFlower).pondClusterAsset} fallbackSrc={flowerById(newFlower).pondClusterFallbackAsset} alt="" />
       <div><p>已安放在水中</p><strong>{flowerById(newFlower).name}</strong></div>
     </section>}
   </main>;

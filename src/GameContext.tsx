@@ -3,6 +3,7 @@ import type { BouquetStem, SaveData } from './types';
 import { collectionPondSlots } from './data/collectionPond';
 import { MAX_VASE_STEMS } from './data/vase';
 import { clearSave, loadSave, save } from './persistence';
+import { preloadFlowerAssets } from './utils/preloadFlowerAssets';
 
 const pondSlotIds = new Set<string>(collectionPondSlots.map(slot => slot.id));
 
@@ -25,6 +26,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     save(data);
     setLastSavedAt(Date.now());
   }, [data]);
+
+  useEffect(() => {
+    const ids = [...new Set([
+      ...data.discoveredFlowerIds,
+      ...(data.pendingSeed ? [data.pendingSeed.flowerId] : []),
+    ])];
+    const timer = window.setTimeout(() => ids.forEach(preloadFlowerAssets), 120);
+    return () => window.clearTimeout(timer);
+  }, [data.discoveredFlowerIds, data.pendingSeed?.flowerId]);
 
   const value = useMemo<Ctx>(() => ({
     data,

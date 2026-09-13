@@ -10,6 +10,7 @@ import { BottomNav } from './components/BottomNav';
 import { Fish } from './components/Fish';
 import { Ripple } from './components/Ripple';
 import { MapEditor } from './components/MapEditor';
+import { preloadFlowerAssets } from './utils/preloadFlowerAssets';
 
 function Shell() {
   const { data, receive } = useGame();
@@ -22,6 +23,7 @@ function Shell() {
       setPage('pond');
       return;
     }
+    preloadFlowerAssets(nextFlower.id);
     setPage('transition');
     setMessage(true);
     setTimeout(() => {

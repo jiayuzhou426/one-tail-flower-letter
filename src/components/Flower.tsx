@@ -1,5 +1,6 @@
 import { flowerById } from '../data/flowers';
 import type { FlowerStage } from '../types';
+import { OptimizedImage } from './OptimizedImage';
 
 export function Flower({
   id,
@@ -17,9 +18,10 @@ export function Flower({
   state?: FlowerStage;
 }) {
   const flower = flowerById(id);
-  return <img
+  return <OptimizedImage
     className={`flower flower-asset ${stem ? 'has-stem' : 'is-head'} ${growing ? 'is-growing' : ''} ${className}`}
     src={flower.assets[state]}
+    fallbackSrc={flower.assetFallbacks[state]}
     alt={flower.name}
     width={size}
     height={size}

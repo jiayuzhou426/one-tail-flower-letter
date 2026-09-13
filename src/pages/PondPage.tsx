@@ -54,20 +54,21 @@ export function PondPage({ openArrange }: { openArrange: () => void }) {
         onReady={() => setWebglUnavailable(false)}
         onUnavailable={() => setWebglUnavailable(true)}
       />
+      <div className="collection-painterly-grade" aria-hidden="true" />
       <div className="collection-vignette" />
       {webglUnavailable && <PondWaterCanvas pulses={waterPulses} blockedAreas={collectionPondSlots} />}
 
       <header className="collection-head">
         <div>
           <p className="eyebrow">收藏水池</p>
-          <p>已安放 <b>{data.pondPlants.length}</b> / {flowers.length} 朵花信</p>
+          <p>已安放 <b>{data.pondPlants.length}</b> / {flowers.length} 封花信</p>
         </div>
         <button className="collection-book" onClick={() => setDrawer(true)} aria-label="打开花信图鉴">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11v16H5zM8 7h5M8 11h5M8 15h4" /></svg>
         </button>
       </header>
 
-      <div className="collection-progress" aria-label={`已收藏 ${data.pondPlants.length} 种花`}>
+      <div className="collection-progress" aria-label={`已收藏 ${data.pondPlants.length} 封花信`}>
         {flowers.map(flower => <i key={flower.id} className={data.pondPlants.some(plant => plant.flowerId === flower.id) ? 'is-filled' : ''} />)}
       </div>
 
@@ -106,8 +107,8 @@ export function PondPage({ openArrange }: { openArrange: () => void }) {
         {seed && seedFlower
           ? <><span>新的花信</span><strong>{seedFlower.name}</strong><p>选择一处水面，让它留在这里。</p></>
           : data.pondPlants.length === flowers.length
-            ? <><span>五次远游，五朵花信</span><p>水面已经记住每一次归来。</p></>
-            : <><span>水面仍在等候</span><p>下一次远游，会带回一朵新花。</p></>}
+            ? <><span>五次远游，五封花信</span><p>水面已经记住每一次归来。</p></>
+            : <><span>水面仍在等候</span><p>下一次远游，会带回一封新花信。</p></>}
       </section>
 
       <button className="collection-arrange-link" onClick={openArrange}>去花瓶看看 <span>→</span></button>
@@ -117,7 +118,7 @@ export function PondPage({ openArrange }: { openArrange: () => void }) {
       <aside className="catalog collection-catalog" onClick={event => event.stopPropagation()}>
         <button className="close" onClick={() => setDrawer(false)} aria-label="关闭图鉴">×</button>
         <p className="eyebrow">花信图鉴</p>
-        <h2>留在水里的花</h2>
+        <h2>留在水里的花信</h2>
         {flowers.map(flower => {
           const pondPlant = data.pondPlants.find(plant => plant.flowerId === flower.id);
           return <article className={`catalog-row ${pondPlant ? '' : 'locked'}`} key={flower.id}>

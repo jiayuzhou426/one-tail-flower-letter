@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { useGame } from '../GameContext';
 import { Flower } from '../components/Flower';
 import { FlowerLetterTray } from '../components/FlowerLetterTray';
@@ -62,28 +62,35 @@ export function ArrangePage() {
       <div className="vase-letter-halo" aria-hidden="true" />
       <div className="vase-letter-counter" aria-hidden="true" />
       <div className="vase-letter-vessel">
+        <Vase part="back" />
         {data.bouquet.map(stem => {
           const position = vaseStemSlots[stem.slot] ?? vaseStemSlots[0];
           return <button
             key={stem.id}
             type="button"
             className={`vase-stem ${selectedStemId === stem.id ? 'is-selected' : ''}`}
-            style={{ left: `${position.left}%`, bottom: `calc(${position.mouth}% + ${stem.heightOffset}px)`, transform: `translateX(-50%) rotate(${stem.angle}deg)`, zIndex: position.layer }}
+            style={{
+              left: `${position.left}%`,
+              bottom: `calc(${position.mouth}% + ${stem.heightOffset}px)`,
+              transform: `translateX(-50%) rotate(${stem.angle}deg)`,
+              zIndex: position.layer + 3,
+              '--stem-extension': `${Math.max(0, stem.heightOffset)}px`,
+            } as CSSProperties}
             onClick={() => setSelectedStemId(stem.id)}
             onPointerDown={event => { pressY.current = event.clientY; setDraggedStemId(stem.id); setSelectedStemId(stem.id); event.currentTarget.setPointerCapture(event.pointerId); }}
             onPointerMove={event => {
               if (draggedStemId !== stem.id || !event.buttons) return;
-              const heightOffset = Math.max(-34, Math.min(54, (pressY.current - event.clientY) / 2));
+              const heightOffset = Math.max(-34, Math.min(36, (pressY.current - event.clientY) / 2));
               update({ ...stem, heightOffset });
             }}
             onPointerUp={() => setDraggedStemId(null)}
             onPointerCancel={() => setDraggedStemId(null)}
             aria-label={`编辑${flowerById(stem.flowerId).name}，上下拖动调整高度`}
           >
-            <Flower id={stem.flowerId} size={88} stem state={stem.stage} />
+            <Flower id={stem.flowerId} size={154} stem state={stem.stage} />
           </button>;
         })}
-        <Vase />
+        <Vase part="front" />
       </div>
     </section>
 

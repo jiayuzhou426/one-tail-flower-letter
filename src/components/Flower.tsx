@@ -22,7 +22,7 @@ export function Flower({
     src={flower.assets[state]}
     alt={flower.name}
     width={size}
-    height={stem ? Math.round(size * 1.65) : size}
+    height={size}
     draggable={false}
   />;
 }

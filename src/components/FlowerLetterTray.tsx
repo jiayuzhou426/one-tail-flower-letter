@@ -15,7 +15,6 @@ export function FlowerLetterTray({ ownedIds, stemCount, maxStems, onPick }: Flow
   return <section className="flower-letter-tray" aria-labelledby="flower-letter-title">
     <div className="flower-letter-tray__head">
       <div>
-        <p className="eyebrow">花信夹</p>
         <h2 id="flower-letter-title">选一封花信</h2>
       </div>
       <span className="flower-letter-tray__count">{stemCount} / {maxStems}</span>
@@ -31,9 +30,8 @@ export function FlowerLetterTray({ ownedIds, stemCount, maxStems, onPick }: Flow
         style={{ '--letter-tint': flower.colors[0], '--letter-light': flower.colors[1] } as CSSProperties}
       >
         <span className="flower-letter__tab" aria-hidden="true" />
-        <span className="flower-letter__art flower-letter__art--soft" aria-hidden="true"><img src={flower.assets.bloom} alt="" draggable={false} /></span>
+        <span className="flower-letter__preview" aria-hidden="true"><img src={flower.assets.bloom} alt="" draggable={false} /></span>
         <span className="flower-letter__face" aria-hidden="true" />
-        <span className="flower-letter__art flower-letter__art--crest" aria-hidden="true"><img src={flower.assets.bloom} alt="" draggable={false} /></span>
         <span className="flower-letter__copy"><span>花信 · {flower.meaning}</span><strong>{flower.name}</strong></span>
         <span className="flower-letter__add" aria-hidden="true">{isFull ? '—' : '＋'}</span>
       </button>)}

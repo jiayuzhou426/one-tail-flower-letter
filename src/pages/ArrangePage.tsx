@@ -37,6 +37,10 @@ export function ArrangePage() {
     if (!selectedStem) return;
     update({ ...selectedStem, angle: Math.max(-28, Math.min(28, selectedStem.angle + amount)) });
   };
+  const changeSelectedStage = (stage: FlowerStage) => {
+    if (!selectedStem) return;
+    update({ ...selectedStem, stage });
+  };
   const removeSelected = () => {
     if (!selectedStem) return;
     setBouquet(data.bouquet.filter(stem => stem.id !== selectedStem.id).map((stem, slot) => ({ ...stem, slot })));
@@ -56,34 +60,42 @@ export function ArrangePage() {
 
     <section className="vase-letter-stage" onPointerUp={() => setDraggedStemId(null)} onPointerCancel={() => setDraggedStemId(null)} aria-label="花瓶编辑台">
       <div className="vase-letter-halo" aria-hidden="true" />
-      {data.bouquet.map(stem => {
-        const position = vaseStemSlots[stem.slot] ?? vaseStemSlots[0];
-        return <button
-          key={stem.id}
-          type="button"
-          className={`vase-stem ${selectedStemId === stem.id ? 'is-selected' : ''}`}
-          style={{ left: `${position.left}%`, top: `${position.top - stem.heightOffset / 3}%`, transform: `translate(-50%, -100%) rotate(${stem.angle}deg)`, zIndex: 12 + position.layer }}
-          onClick={() => setSelectedStemId(stem.id)}
-          onPointerDown={event => { pressY.current = event.clientY; setDraggedStemId(stem.id); setSelectedStemId(stem.id); event.currentTarget.setPointerCapture(event.pointerId); }}
-          onPointerMove={event => {
-            if (draggedStemId !== stem.id || !event.buttons) return;
-            const heightOffset = Math.max(-30, Math.min(42, (pressY.current - event.clientY) / 3));
-            update({ ...stem, heightOffset });
-          }}
-          onPointerUp={() => setDraggedStemId(null)}
-          onPointerCancel={() => setDraggedStemId(null)}
-          aria-label={`编辑${flowerById(stem.flowerId).name}`}
-        >
-          <Flower id={stem.flowerId} size={88} stem state={stem.stage} />
-        </button>;
-      })}
-      <Vase />
+      <div className="vase-letter-counter" aria-hidden="true" />
+      <div className="vase-letter-vessel">
+        {data.bouquet.map(stem => {
+          const position = vaseStemSlots[stem.slot] ?? vaseStemSlots[0];
+          return <button
+            key={stem.id}
+            type="button"
+            className={`vase-stem ${selectedStemId === stem.id ? 'is-selected' : ''}`}
+            style={{ left: `${position.left}%`, bottom: `calc(${position.mouth}% + ${stem.heightOffset}px)`, transform: `translateX(-50%) rotate(${stem.angle}deg)`, zIndex: position.layer }}
+            onClick={() => setSelectedStemId(stem.id)}
+            onPointerDown={event => { pressY.current = event.clientY; setDraggedStemId(stem.id); setSelectedStemId(stem.id); event.currentTarget.setPointerCapture(event.pointerId); }}
+            onPointerMove={event => {
+              if (draggedStemId !== stem.id || !event.buttons) return;
+              const heightOffset = Math.max(-34, Math.min(54, (pressY.current - event.clientY) / 2));
+              update({ ...stem, heightOffset });
+            }}
+            onPointerUp={() => setDraggedStemId(null)}
+            onPointerCancel={() => setDraggedStemId(null)}
+            aria-label={`编辑${flowerById(stem.flowerId).name}，上下拖动调整高度`}
+          >
+            <Flower id={stem.flowerId} size={88} stem state={stem.stage} />
+          </button>;
+        })}
+        <Vase />
+      </div>
     </section>
 
     <section className="vase-letter-controls" aria-live="polite">
       {selectedStem ? <>
-        <p><b>{flowerById(selectedStem.flowerId).name}</b><span>上下拖动调整高低</span></p>
-        <div><button type="button" onClick={() => rotateSelected(-7)}>向左转</button><button type="button" onClick={() => rotateSelected(7)}>向右转</button><button type="button" className="vase-remove" onClick={removeSelected}>移除</button></div>
+        <p><b>{flowerById(selectedStem.flowerId).name}</b><span>已插入花瓶 · 上下拖动调整高低</span></p>
+        <div className="vase-stem-actions">
+          <div className="vase-stage-switcher" aria-label="调整花枝状态">
+            {bouquetStages.map(stage => <button key={stage} type="button" className={selectedStem.stage === stage ? 'is-active' : ''} onClick={() => changeSelectedStage(stage)}>{stage === 'bud' ? '含苞' : stage === 'half-open' ? '半开' : '盛放'}</button>)}
+          </div>
+          <div className="vase-motion-actions"><button type="button" onClick={() => rotateSelected(-7)}>向左转</button><button type="button" onClick={() => rotateSelected(7)}>向右转</button><button type="button" className="vase-remove" onClick={removeSelected}>移除</button></div>
+        </div>
       </> : <p className="vase-letter-tip">选择花信加入花瓶；点选花枝后，可拖动、转向或移除。</p>}
       <strong>{data.bouquet.length} / {MAX_VASE_STEMS} 枝{isFull ? ' · 花瓶已满' : ''}</strong>
     </section>

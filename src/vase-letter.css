@@ -1,2 +1,79 @@
-/* 花信花瓶：固定为一只花瓶、一张背景，以花信夹承载可重复使用的花材。 */
-.vase-letter{padding:0;overflow:hidden;background:#102731;color:#f7fff9}.vase-letter-backdrop{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;pointer-events:none;user-select:none}.vase-letter-veil{position:absolute;z-index:1;inset:0;pointer-events:none;background:linear-gradient(180deg,#061f2c4f 0%,#0b26301c 35%,#061b27a8 100%)}.vase-letter-head{position:absolute;z-index:6;top:calc(20px + env(safe-area-inset-top));left:22px;right:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;text-shadow:0 2px 8px #071c2799}.vase-letter-head .eyebrow{margin-bottom:4px;color:#e1fff2}.vase-letter-head h1{max-width:230px;margin:0;font:400 18px/1.35 Georgia,"Songti SC",serif;letter-spacing:.035em;color:#f8fff9}.vase-head-actions{display:grid;justify-items:end;gap:8px}.vase-auto-save{display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #eafff447;border-radius:99px;background:#092c38a3;color:#e7fff4;font-size:10px;letter-spacing:.06em;white-space:nowrap;backdrop-filter:blur(8px)}.vase-auto-save i{display:block;width:5px;height:5px;border-radius:50%;background:#fff0ad;box-shadow:0 0 8px #fff1a2}.vase-reset{padding:2px 1px;border-bottom:1px solid #dffff76b;color:#effff8;font-size:11px;text-shadow:0 1px 5px #07212c}.vase-reset:disabled{opacity:.36;cursor:default}.vase-letter-stage{position:absolute;z-index:2;top:96px;right:0;bottom:calc(248px + env(safe-area-inset-bottom));left:0;overflow:hidden;touch-action:none}.vase-letter-halo{position:absolute;z-index:1;bottom:5%;left:50%;width:min(74vw,326px);height:34%;border-radius:50%;transform:translateX(-50%);background:radial-gradient(ellipse,#e9f6e562 0%,#bbdce541 33%,transparent 70%);filter:blur(9px);pointer-events:none}.vase-letter .vase{position:absolute;z-index:20;bottom:-1px;left:50%;width:min(55vw,244px);height:auto;max-height:76%;transform:translateX(-50%);object-fit:contain;filter:drop-shadow(0 14px 18px #04192375);pointer-events:none;user-select:none}.vase-stem{position:absolute;width:100px;height:176px;padding:0;border:0;background:transparent;transform-origin:50% 100%;transition:filter .18s ease;touch-action:none}.vase-stem:active{transition:none}.vase-stem .flower{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;filter:drop-shadow(0 6px 5px #061c2775);user-select:none}.vase-stem.is-selected{filter:brightness(1.08)}.vase-stem.is-selected::after{position:absolute;right:12px;bottom:3px;left:12px;z-index:2;height:17px;border:1px solid #fff2b8b3;border-radius:50%;box-shadow:0 0 0 5px #fff1a122,0 0 12px #fff4be80;content:"";pointer-events:none}.vase-letter-controls{position:absolute;z-index:7;right:18px;bottom:calc(212px + env(safe-area-inset-bottom));left:18px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 9px;min-height:46px;padding:7px 9px 7px 12px;border:1px solid #e7fff34a;border-radius:14px;background:#072531a8;box-shadow:0 8px 20px #0318234d;backdrop-filter:blur(10px);color:#effff8}.vase-letter-controls p{grid-column:1;grid-row:1;margin:0;min-width:0;color:#f2fff9;font-size:11px;line-height:1.45}.vase-letter-controls p b{margin-right:7px;color:#fff0b8;font:400 14px Georgia,"Songti SC",serif}.vase-letter-controls p span{color:#d6eee7b8}.vase-letter-controls>div{display:flex;grid-column:1;grid-row:2;gap:5px}.vase-letter-controls>div button{padding:3px 7px;border:1px solid #edfff04d;border-radius:99px;background:#d7fff013;color:#effff7;font-size:10px}.vase-letter-controls>div .vase-remove{border-color:#ffd4c582;color:#fff0e8;background:#8e414229}.vase-letter-controls>strong{grid-column:2;grid-row:1 / span 2;align-self:center;white-space:nowrap;color:#fff2b6;font:400 12px Georgia,"Songti SC",serif}.vase-letter-tip{grid-row:1 / span 2!important;color:#e9fff4c9!important}.flower-letter-tray{position:absolute;z-index:7;right:0;bottom:calc(56px + env(safe-area-inset-bottom));left:0;height:171px;margin:0;color:#eff8f5}.flower-letter-tray__head{display:flex;align-items:end;justify-content:space-between;padding:0 22px 2px}.flower-letter-tray__head .eyebrow{margin-bottom:2px;color:#c7dfd6}.flower-letter-tray__head h2{margin:0;font:400 17px Georgia,"Songti SC",serif;color:#f8fff8}.flower-letter-tray__count{padding:5px 9px;border:1px solid #edfff43d;border-radius:99px;background:#082c38a8;color:#fff0b7;font:400 12px Georgia,"Songti SC",serif;backdrop-filter:blur(8px)}.flower-letter-tray__track{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:12px;overflow-x:auto;overflow-y:hidden;padding:37px 20px 12px;scroll-snap-type:x mandatory;scrollbar-width:none;touch-action:pan-x}.flower-letter-tray__track::-webkit-scrollbar{display:none}.flower-letter{position:relative;width:120px;height:112px;padding:0;overflow:visible;isolation:isolate;scroll-snap-align:start;text-align:left;transition:transform .18s ease,opacity .18s ease}.flower-letter:not(:disabled):active{transform:scale(.96)}.flower-letter:focus-visible .flower-letter__face{outline:2px solid #fff4c3;outline-offset:3px}.flower-letter:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.55)}.flower-letter__tab{position:absolute;z-index:1;top:0;left:11px;width:76%;height:42px;border:1px solid #f4fffa57;border-radius:16px 16px 0 0;background:linear-gradient(135deg,#ffffff3d,#ffffff0d),var(--letter-tint);box-shadow:0 7px 18px #000b1433;opacity:.52}.flower-letter__face{position:absolute;z-index:3;inset:22px 0 0;border:1px solid #f7fffc78;border-radius:17px;background:linear-gradient(135deg,#ffffff61,#e9f5f01a),#0f29383d;box-shadow:inset 0 1px 0 #ffffff5c,0 10px 22px #00111b55;backdrop-filter:blur(13px) saturate(115%)}.flower-letter__art{position:absolute;left:50%;width:132px;height:132px;transform:translateX(-50%);pointer-events:none}.flower-letter__art img{display:block;width:100%;height:100%;object-fit:contain}.flower-letter__art--soft{z-index:2;bottom:-2px;opacity:.36;filter:blur(3.5px) saturate(.85)}.flower-letter__art--crest{z-index:4;bottom:-2px;clip-path:inset(0 0 53% 0);filter:drop-shadow(0 5px 7px #000f1f52)}.flower-letter__copy{position:absolute;z-index:5;right:11px;bottom:11px;left:12px;display:grid;gap:2px;pointer-events:none;text-shadow:0 1px 5px #00141f80}.flower-letter__copy span{overflow:hidden;color:#f5fffabd;font-size:9px;letter-spacing:.07em;text-overflow:ellipsis;white-space:nowrap}.flower-letter__copy strong{overflow:hidden;color:#fff9de;font:400 15px Georgia,"Songti SC",serif;text-overflow:ellipsis;white-space:nowrap}.flower-letter__add{position:absolute;z-index:6;top:29px;right:9px;display:grid;width:20px;height:20px;place-items:center;border:1px solid #ffffff6b;border-radius:50%;background:#08262d52;color:#fff4bd;font-size:15px;line-height:1}.flower-letter-tray__empty{margin:19px 22px;color:#eafff4bf;font-size:12px}.vase-letter~.bottom-nav{border-color:#dbfff33b;background:#062430d9;backdrop-filter:blur(12px)}.vase-letter~.bottom-nav button{color:#c8e6de}.vase-letter~.bottom-nav .active{color:#fff0b6}@media(max-height:700px){.vase-letter-head{top:calc(14px + env(safe-area-inset-top))}.vase-letter-stage{top:82px;bottom:calc(229px + env(safe-area-inset-bottom))}.vase-letter .vase{width:min(51vw,214px)}.vase-stem{width:86px;height:151px}.vase-letter-controls{bottom:calc(194px + env(safe-area-inset-bottom));min-height:40px;padding-block:5px}.flower-letter-tray{bottom:calc(53px + env(safe-area-inset-bottom));height:151px}.flower-letter-tray__track{padding-top:27px}.flower-letter{transform:scale(.92);transform-origin:left bottom}.flower-letter:not(:disabled):active{transform:scale(.88)}}
+/* 花信花瓶：花枝与瓶口共享同一坐标系，花信则是可以看见枝叶的磨砂信封。 */
+.vase-letter{padding:0;overflow:hidden;background:#102731;color:#f7fff9}
+.vase-letter-backdrop{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;pointer-events:none;user-select:none}
+.vase-letter-veil{position:absolute;z-index:1;inset:0;pointer-events:none;background:linear-gradient(180deg,#061f2c48 0%,#09253016 36%,#061b2788 76%,#041720ca 100%)}
+
+.vase-letter-head{position:absolute;z-index:8;top:calc(20px + env(safe-area-inset-top));left:22px;right:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;text-shadow:0 2px 8px #071c2799}
+.vase-letter-head .eyebrow{margin-bottom:4px;color:#e1fff2}
+.vase-letter-head h1{max-width:230px;margin:0;font:400 18px/1.35 Georgia,"Songti SC",serif;letter-spacing:.035em;color:#f8fff9}
+.vase-head-actions{display:grid;justify-items:end;gap:8px}
+.vase-auto-save{display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #eafff447;border-radius:99px;background:#092c38a3;color:#e7fff4;font-size:10px;letter-spacing:.06em;white-space:nowrap;backdrop-filter:blur(8px)}
+.vase-auto-save i{display:block;width:5px;height:5px;border-radius:50%;background:#fff0ad;box-shadow:0 0 8px #fff1a2}
+.vase-reset{padding:2px 1px;border-bottom:1px solid #dffff76b;color:#effff8;font-size:11px;text-shadow:0 1px 5px #07212c}
+.vase-reset:disabled{opacity:.36;cursor:default}
+
+/* 舞台延续到底部，花瓶落在一层暗色玻璃台面上，而不是停在半空。 */
+.vase-letter-stage{position:absolute;z-index:2;top:82px;right:0;bottom:calc(54px + env(safe-area-inset-bottom));left:0;overflow:hidden;touch-action:none}
+.vase-letter-halo{position:absolute;z-index:0;bottom:106px;left:50%;width:min(78vw,360px);height:36%;border-radius:50%;transform:translateX(-50%);background:radial-gradient(ellipse,#e9f6e54c 0%,#9ac8d836 34%,transparent 72%);filter:blur(10px);pointer-events:none}
+.vase-letter-counter{position:absolute;z-index:1;right:-8%;bottom:122px;left:-8%;height:76px;border-top:1px solid #d9f5ef43;background:radial-gradient(ellipse at 50% 3%,#c9f0e447 0%,#b8e4e019 38%,transparent 69%),linear-gradient(180deg,#0f3d4b66 0%,#092b386e 37%,#061a25b5 100%);box-shadow:0 -10px 26px #071e2a55,0 11px 25px #0310178a;pointer-events:none}
+.vase-letter-counter::after{position:absolute;right:12%;bottom:12px;left:12%;height:1px;background:linear-gradient(90deg,transparent,#e7fff16b,transparent);content:""}
+
+/* PNG 本身有透明留白；这个容器同时承载瓶子和花枝，70% 正是瓶口基准。 */
+.vase-letter-vessel{position:absolute;z-index:3;bottom:122px;left:50%;width:min(58vw,258px);aspect-ratio:1214/1295;transform:translateX(-50%);overflow:visible}
+.vase-letter .vase{position:absolute;z-index:9;inset:0;width:100%;height:100%;max-height:none;transform:none;object-fit:contain;filter:drop-shadow(0 12px 16px #04192385);pointer-events:none;user-select:none}
+.vase-stem{position:absolute;width:98px;height:176px;padding:0;border:0;background:transparent;transform-origin:50% 100%;transition:filter .18s ease,opacity .18s ease;touch-action:none}
+.vase-stem:active{transition:none}
+.vase-stem .flower{position:absolute;bottom:0;left:50%;width:100%;height:100%;transform:translateX(-50%);object-fit:fill;filter:drop-shadow(0 5px 4px #061c2765);user-select:none}
+.vase-stem.is-selected{filter:brightness(1.12) drop-shadow(0 0 8px #fff4b466)}
+
+/* 控制卡避开中央花瓶，停在右上角的窗口区。 */
+.vase-letter-controls{position:absolute;z-index:8;top:calc(106px + env(safe-area-inset-top));right:14px;display:grid;width:min(214px,calc(100% - 28px));gap:5px;padding:8px 9px 8px 11px;border:1px solid #e7fff34a;border-radius:14px;background:#072531aa;box-shadow:0 8px 20px #0318234d;backdrop-filter:blur(10px);color:#effff8}
+.vase-letter-controls p{margin:0;min-width:0;color:#f2fff9;font-size:10px;line-height:1.45}
+.vase-letter-controls p b{margin-right:6px;color:#fff0b8;font:400 14px Georgia,"Songti SC",serif}
+.vase-letter-controls p span{color:#d6eee7b8}
+.vase-stem-actions{display:grid;gap:5px}
+.vase-stage-switcher,.vase-motion-actions{display:flex;flex-wrap:wrap;gap:4px}
+.vase-stage-switcher button,.vase-motion-actions button{padding:3px 7px;border:1px solid #edfff04d;border-radius:99px;background:#d7fff013;color:#effff7;font-size:10px;line-height:1.25}
+.vase-stage-switcher button.is-active{border-color:#fff1b8a8;background:#fff1b626;color:#fff6db}
+.vase-motion-actions .vase-remove{border-color:#ffd4c582;color:#fff0e8;background:#8e414229}
+.vase-letter-controls>strong{position:absolute;right:9px;top:9px;white-space:nowrap;color:#fff2b6;font:400 11px Georgia,"Songti SC",serif}
+.vase-letter-controls:has(.vase-stem-actions) p{padding-right:45px}
+.vase-letter-tip{padding-right:42px!important;color:#e9fff4c9!important}
+
+/* 花信抽屉：只保留一个清晰标题，花枝在磨砂纸面之下完整可见。 */
+.flower-letter-tray{position:absolute;z-index:8;right:0;bottom:calc(54px + env(safe-area-inset-bottom));left:0;height:122px;margin:0;color:#eff8f5}
+.flower-letter-tray__head{display:flex;align-items:center;justify-content:space-between;height:24px;padding:0 20px}
+.flower-letter-tray__head h2{margin:0;font:400 17px Georgia,"Songti SC",serif;color:#f8fff8;text-shadow:0 1px 5px #001923a8}
+.flower-letter-tray__count{padding:4px 8px;border:1px solid #edfff43d;border-radius:99px;background:#082c38a8;color:#fff0b7;font:400 11px Georgia,"Songti SC",serif;backdrop-filter:blur(8px)}
+.flower-letter-tray__track{display:grid;grid-auto-flow:column;grid-auto-columns:116px;gap:11px;overflow-x:auto;overflow-y:hidden;padding:9px 18px 5px;scroll-snap-type:x mandatory;scrollbar-width:none;touch-action:pan-x}
+.flower-letter-tray__track::-webkit-scrollbar{display:none}
+.flower-letter{position:relative;width:116px;height:87px;padding:0;overflow:visible;isolation:isolate;scroll-snap-align:start;text-align:left;transition:transform .18s ease,opacity .18s ease}
+.flower-letter:not(:disabled):active{transform:scale(.96)}
+.flower-letter:focus-visible .flower-letter__face{outline:2px solid #fff4c3;outline-offset:3px}
+.flower-letter:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.55)}
+.flower-letter__tab{position:absolute;z-index:1;top:0;left:12px;width:73%;height:33px;border:1px solid #f4fffa57;border-radius:14px 14px 0 0;background:linear-gradient(135deg,#ffffff3d,#ffffff0d),var(--letter-tint);box-shadow:0 6px 15px #000b1433;opacity:.52}
+.flower-letter__preview{position:absolute;z-index:2;top:13px;right:3px;bottom:2px;left:3px;overflow:hidden;border-radius:13px;pointer-events:none}
+.flower-letter__preview img{position:absolute;bottom:-2px;left:50%;display:block;width:118px;height:78px;max-width:none;transform:translateX(-50%) rotate(-3deg);object-fit:contain;filter:blur(2.6px) saturate(.87);opacity:.78}
+.flower-letter__face{position:absolute;z-index:3;inset:15px 0 0;border:1px solid #f7fffc78;border-radius:15px;background:linear-gradient(135deg,#ffffff59 0%,#f1f8f15c 30%,#cfe1dd17 100%);box-shadow:inset 0 1px 0 #ffffff66,0 8px 18px #00111b55;backdrop-filter:blur(2.2px) saturate(82%)}
+.flower-letter__face::after{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(145deg,#ffffff2b,transparent 42%,#07273520);content:""}
+.flower-letter__copy{position:absolute;z-index:5;right:10px;bottom:8px;left:11px;display:grid;gap:1px;pointer-events:none;text-shadow:0 1px 5px #00141f90}
+.flower-letter__copy span{overflow:hidden;color:#eafff7cf;font-size:8px;letter-spacing:.065em;text-overflow:ellipsis;white-space:nowrap}
+.flower-letter__copy strong{overflow:hidden;color:#fff9e2;font:400 14px Georgia,"Songti SC",serif;text-overflow:ellipsis;white-space:nowrap}
+.flower-letter__add{position:absolute;z-index:6;top:22px;right:8px;display:grid;width:19px;height:19px;place-items:center;border:1px solid #ffffff6b;border-radius:50%;background:#08262d65;color:#fff4bd;font-size:14px;line-height:1}
+.flower-letter-tray__empty{margin:18px 20px;color:#eafff4bf;font-size:12px}
+
+.vase-letter~.bottom-nav{border-color:#dbfff33b;background:#062430d9;backdrop-filter:blur(12px)}
+.vase-letter~.bottom-nav button{color:#c8e6de}
+.vase-letter~.bottom-nav .active{color:#fff0b6}
+
+@media(max-height:700px){
+  .vase-letter-head{top:calc(14px + env(safe-area-inset-top))}
+  .vase-letter-stage{top:76px}
+  .vase-letter-halo{bottom:91px}
+  .vase-letter-counter{bottom:108px;height:66px}
+  .vase-letter-vessel{bottom:108px;width:min(54vw,238px)}
+  .vase-stem{width:88px;height:157px}
+  .vase-letter-controls{top:calc(92px + env(safe-area-inset-top));width:min(202px,calc(100% - 26px));padding:6px 8px 7px 10px}
+  .flower-letter-tray{bottom:calc(52px + env(safe-area-inset-bottom));height:116px}
+  .flower-letter-tray__track{padding-top:7px}
+}

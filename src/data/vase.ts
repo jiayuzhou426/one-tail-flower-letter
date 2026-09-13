@@ -7,11 +7,13 @@ export const VASE_BACKGROUND_ASSET = publicAsset('assets/vase/vase-letter-room-v
 export const MAX_VASE_STEMS = 7;
 
 export const vaseStemSlots = [
-  { left: 27, top: 67, angle: -14, layer: 1 },
-  { left: 48, top: 58, angle: -3, layer: 2 },
-  { left: 70, top: 67, angle: 14, layer: 3 },
-  { left: 36, top: 76, angle: -8, layer: 4 },
-  { left: 63, top: 76, angle: 8, layer: 5 },
-  { left: 45, top: 83, angle: -2, layer: 6 },
-  { left: 56, top: 83, angle: 2, layer: 7 },
+  // Every stem starts from the mouth of the vase.  The small horizontal
+  // offsets create a bouquet, rather than placing individual flowers around it.
+  { left: 50, mouth: 70, angle: -2, layer: 4 },
+  { left: 45, mouth: 70, angle: -12, layer: 3 },
+  { left: 55, mouth: 70, angle: 12, layer: 5 },
+  { left: 41, mouth: 70, angle: -18, layer: 2 },
+  { left: 59, mouth: 70, angle: 18, layer: 6 },
+  { left: 47, mouth: 70, angle: -7, layer: 1 },
+  { left: 53, mouth: 70, angle: 7, layer: 7 },
 ] as const;
